@@ -3,26 +3,33 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var passport = require('passport');
+var authenticate = require('./authenticate');
 //Loads the handlebars module
 const handlebars = require('express-handlebars');
 import bodyparser from 'body-parser';
-//import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 //import cors from 'cors';
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 
 var app = express();
 
+//db password
+//const password = process.env.YOURPASSWORDVARIABLE
+const password = encodeURIComponent('pw#321');
+
 //database name
-// var dbName = '';
-// var dbConnection = mongoose.connection;
+var dbName = 'insomnia';
+var dbConnection = mongoose.connection;
 
 //mongo connection
-/*mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
+//mongoose.connect('mongodb://srrAdmin:' +password+ '@cluster0.aokyl.mongodb.net/insomnia?authSource=admin&replicaSet=atlas-kmxpvq-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true', {
 mongoose.connect('mongodb://localhost/' + dbName, {
 	useNewUrlParser: true, 
 	useUnifiedTopology: true
-});*/
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,22 +44,58 @@ app.engine('hbs', handlebars({
 	defaultLayout: 'main'
 }));
 
+//assigns the client an ID stored on the server
+app.use(require('express-session')({
+//secret prevents hijacking and tampering
+  secret: 'COP',
+  resave: true,
+  saveUninitialized: true
+}));
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', indexRouter);
 app.use('/admin', adminRouter);
 
+
+
+// Basic Authentication for session and cookies
+function auth (req, res, next) {
+  console.log(req.user);
+
+  if (!req.user) {
+    var err = new Error('You are not authenticated!');
+    err.status = 403;
+    next(err);
+  }
+  else {
+    next();
+  }
+}
+app.use(auth);
+
 //CORS setup
 //app.use(cors());
+
+//bodyparser setup
+//transpile request to usable format
+app.use(bodyparser.urlencoded({extended: true}));
+app.use(bodyparser.json());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {
