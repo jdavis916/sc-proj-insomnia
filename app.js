@@ -6,20 +6,40 @@ var logger = require('morgan');
 //Loads the handlebars module
 const handlebars = require('express-handlebars');
 import bodyparser from 'body-parser';
-//import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 //import cors from 'cors';
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 
 var app = express();
 
+//datapassword
+var pw = encodeURIComponent('pw#321');
+
 //database name
-// var dbName = '';
-// var dbConnection = mongoose.connection;
+var dbName = '';
+var dbConnection = mongoose.connection;
+
+var connectStr = 'mongodb+srv://srrAdmin:'+pw+'@cluster0.aokyl.mongodb.net';
 
 //mongo connection
-/*mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/' + dbName, {
+mongoose.Promise = global.Promise;
+
+try {
+    // Connect to the MongoDB cluster
+     mongoose.connect(
+      connectStr,
+      { useNewUrlParser: true, useUnifiedTopology: true },
+      () => console.log(" Mongoose is connected")
+    );
+
+  } catch (e) {
+    console.log("could not connect");
+  }
+/*mongoose.connect(
+	//'mongodb://localhost/' + dbName, 
+	connectStr, 
+{
 	useNewUrlParser: true, 
 	useUnifiedTopology: true
 });*/
@@ -48,6 +68,11 @@ app.use('/admin', adminRouter);
 
 //CORS setup
 //app.use(cors());
+
+//bodyparser setup
+//transpile request to usable format
+app.use(bodyparser.urlencoded({extended: true}));
+app.use(bodyparser.json());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
