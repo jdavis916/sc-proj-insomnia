@@ -5,10 +5,11 @@ var router = express.Router();
  
 var activeMenu = {
     home: false,
-    cars: false,
+    projects: false,
+    users: false,
+    tools: false,
+    teams: false,
     search: false,
-    survey: false,
-    about: false,
     contact: false,
 };
 
@@ -34,58 +35,66 @@ router.get('/', function(req, res, next) {
 })
 .get('/', function(req, res, next) {
   res.render('index', { 
-  	title: 'Simple Node Template',
+  	title: 'Project Insomnia',
   	msg: 'This sample template should help get you on your way.',
   	pageMainClass: 'pgHome',
     active: getMenuActive('home', activeMenu)
   });
 })
 .get('/projects', function(req, res, next) {
-  res.render('index', { 
+  res.render('projects', { 
   	title: 'Projects',
   	msg: 'This sample template should help get you on your way.',
   	pageMainClass: 'pgProjects',
-    active: getMenuActive('home', activeMenu)
+    active: getMenuActive('projects', activeMenu)
+  });
+})
+.get('/users', function(req, res, next) {
+  res.render('users', { 
+    title: 'Users',
+    msg: 'This sample template should help get you on your way.',
+    pageMainClass: 'pgTools',
+    active: getMenuActive('users', activeMenu)
   });
 })
 .get('/tools', function(req, res, next) {
-  res.render('index', { 
+  res.render('tools', { 
   	title: 'Tools',
   	msg: 'This sample template should help get you on your way.',
   	pageMainClass: 'pgTools',
-    active: getMenuActive('home', activeMenu)
-  });
-})
-.get('/search', function(req, res, next) {
-  res.render('index', { 
-  	title: 'Search',
-  	msg: 'This sample template should help get you on your way.',
-  	pageMainClass: 'pgSearch',
-    active: getMenuActive('home', activeMenu)
+    active: getMenuActive('tools', activeMenu)
   });
 })
 .get('/teams', function(req, res, next) {
-  res.render('index', { 
+  res.render('teams', { 
     title: 'Teams',
     msg: 'This sample template should help get you on your way.',
     pageMainClass: 'pgTeams',
-    active: getMenuActive('home', activeMenu)
+    active: getMenuActive('teams', activeMenu)
+  });
+})
+.get('/search', function(req, res, next) {
+  res.render('search', { 
+  	title: 'Search',
+  	msg: 'This sample template should help get you on your way.',
+  	pageMainClass: 'pgSearch',
+    active: getMenuActive('search', activeMenu)
   });
 })
 .get('/profile', function(req, res, next) {
-  res.render('index', { 
-  	title: 'Simple Node Template',
+  res.render('profile', { 
+  	title: 'User Profile',
   	msg: 'This sample template should help get you on your way.',
   	pageMainClass: 'pgProfile',
-    active: getMenuActive('home', activeMenu)
+    active: getMenuActive('profile', activeMenu)
   });
 })
 .get('/contact', function(req, res, next) {
-  res.render('index', { 
-  	title: 'Simple Node Template',
+  res.render('contact', { 
+  	title: 'Contact Us',
   	msg: 'This sample template should help get you on your way.',
   	pageMainClass: 'pgContact',
-    active: getMenuActive('home', activeMenu)
+    active: getMenuActive('contact', activeMenu)
   });
 })
 .post('/contactSubmit', function(req, res, next) {
