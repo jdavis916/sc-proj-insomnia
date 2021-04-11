@@ -19,7 +19,12 @@
     <!-- vendor css -->
 
     <!--Custom CSS-->
-    <link rel='stylesheet' href='/css/styles.css' />
+    <link rel="stylesheet" href="css/style.css" />
+    <script>
+      var loggedIn = {{loggedIn}};
+      
+      console.log(loggedIn);
+    </script>
   </head>
   <body>
     <div class="container">
@@ -52,6 +57,10 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link {{#if active.contact}}active{{/if}}" href="/contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                  
+                  <a class="nav-link" id="btnLogout" href="#">{{#if loggedIn}}Sign out{{else}}Login{{/if}}</a>
                 </li>
               </ul>
               <!-- <form class="d-flex">

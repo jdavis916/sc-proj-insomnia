@@ -1,5 +1,5 @@
-// ***** THIS FILE IS NOT CURRENTLY IN USE *****
-//**********************************************
+// ***** THIS FILE IS NOT CURRENTLY IN USE *****\\
+//**********************************************\\
 
 const userModel = require('../backend/models/user')
 const passport = require('passport');
