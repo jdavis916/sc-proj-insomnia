@@ -14,7 +14,9 @@ var activeMenu = {
     search: false,
     contact: false,
 };
-
+function loginStatus(req){
+	return (req.user)? true : false;
+}
 function getMenuActive(key, menu){
     //makes a copy of the menu object
     var activeMenu = JSON.parse(JSON.stringify(menu));
@@ -32,6 +34,7 @@ router
     res.render('index', {
   	title: 'Project Insomnia',
   	msg: 'This sample template should help get you on your way.',
+  	loggedIn: loginStatus(req),
   	pageMainClass: 'pgHome',
     active: getMenuActive('home', activeMenu)
   });
@@ -90,6 +93,39 @@ router
   	msg: 'This sample template should help get you on your way.',
   	pageMainClass: 'pgContact',
     active: getMenuActive('contact', activeMenu)
+  });
+})
+.get('/login', function(req, res, next) {
+  res.render('login', {
+  	title: 'Log in',
+  	pageMainClass: 'pgLogin',
+  	usernameLabel: 'Username',
+  	passwordLabel: 'Password',
+  	logBtnLabel: 'Log In',
+    active: getMenuActive('login', activeMenu)
+  });
+})
+.get('/notAuth', function(req, res, next) {
+  res.render('notAuth', {
+  	title: 'Not Authorized',
+  	msg: 'This sample template should help get you on your way.',
+  	loggedIn: loginStatus(req),
+  	pageMainClass: 'pgHome'
+  });
+})
+.get('/signup', function(req, res, next) {
+  res.render('signup', {
+  	title: 'Sign up',
+  	msg: "Don't worry, we will not share this information with anyone.",
+  	pageMainClass: 'pgSignUp',
+  	fnameLabel: 'Enter your first name:',
+	lnameLabel: 'Enter your last name:',
+	emailLabel: 'Enter your email address:',
+	dobLabel: 'Select your date of birth:',
+	projectsLabel: 'What projects are you working on?',
+	usernameLabel: 'Enter a username:',
+	passwordLabel: 'Choose a password:',
+    active: getMenuActive('signup', activeMenu)
   });
 })
 .post('/contactSubmit', function(req, res, next) {
