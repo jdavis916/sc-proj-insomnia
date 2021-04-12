@@ -22,7 +22,7 @@ var pw = encodeURIComponent('pw#321');
 var dbName = '';
 var dbConnection = mongoose.connection;
 
-var connectStr = 'mongodb+srv://srrAdmin:'+pw+'@cluster0.aokyl.mongodb.net';
+var connectStr = 'mongodb+srv://srrAdmin:'+pw+'@cluster0.aokyl.mongodb.net/insomnia';
 
 //mongo connection
 mongoose.Promise = global.Promise;

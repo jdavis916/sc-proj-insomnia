@@ -167,10 +167,16 @@ router
     //checks the username and password against entries in the database
     //also assigns session id
     .post('/login', passport.authenticate('local'), (req, res) => {
-      console.log(req.session);
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json');
-      res.json({success: true, status: 'You are successfully logged in!'});
+      //console.log(req.session);
+    	try{
+     		console.log(JSON.stringify(req.headers));
+     		res.statusCode = 200;
+     		res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
+     		res.redirect('/profile');
+     		window.location.reload();
+     	}catch(err){
+     		res.status(500).json({message: err});
+     	}
     })
     //clears session info and redirects to the home page
     .get('/logout', (req, res) => {
