@@ -43,6 +43,7 @@ router
   res.render('projects', {
   	title: 'Projects',
   	msg: 'This sample template should help get you on your way.',
+  	loggedIn: loginStatus(req),
   	pageMainClass: 'pgProjects',
     active: getMenuActive('projects', activeMenu)
   });
@@ -51,6 +52,7 @@ router
   res.render('users', {
     title: 'Users',
     msg: 'This sample template should help get you on your way.',
+    loggedIn: loginStatus(req),
     pageMainClass: 'pgTools',
     active: getMenuActive('users', activeMenu)
   });
@@ -59,6 +61,7 @@ router
   res.render('tools', {
   	title: 'Tools',
   	msg: 'This sample template should help get you on your way.',
+  	loggedIn: loginStatus(req),
   	pageMainClass: 'pgTools',
     active: getMenuActive('tools', activeMenu)
   });
@@ -67,6 +70,7 @@ router
   res.render('teams', {
     title: 'Teams',
     msg: 'This sample template should help get you on your way.',
+    loggedIn: loginStatus(req),
     pageMainClass: 'pgTeams',
     active: getMenuActive('teams', activeMenu)
   });
@@ -75,6 +79,7 @@ router
   res.render('search', {
   	title: 'Search',
   	msg: 'This sample template should help get you on your way.',
+  	loggedIn: loginStatus(req),
   	pageMainClass: 'pgSearch',
     active: getMenuActive('search', activeMenu)
   });
@@ -83,6 +88,7 @@ router
   res.render('profile', {
   	title: 'User Profile',
   	msg: 'This sample template should help get you on your way.',
+  	loggedIn: loginStatus(req),
   	pageMainClass: 'pgProfile',
     active: getMenuActive('profile', activeMenu)
   });
@@ -91,13 +97,18 @@ router
   res.render('contact', {
   	title: 'Contact Us',
   	msg: 'This sample template should help get you on your way.',
+  	loggedIn: loginStatus(req),
   	pageMainClass: 'pgContact',
     active: getMenuActive('contact', activeMenu)
   });
 })
 .get('/login', function(req, res, next) {
+	if(req.user){
+		res.send('You are already logged in!');
+	}
   res.render('login', {
   	title: 'Log in',
+  	loggedIn: loginStatus(req),
   	pageMainClass: 'pgLogin',
   	usernameLabel: 'Username',
   	passwordLabel: 'Password',

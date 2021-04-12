@@ -4,13 +4,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 	document.querySelector('#btnLogout').onclick = function logout(){
 		if(loggedIn){
+			this.innerHTML = 'Logout';
 		//true
-			req.session.destroy();
-		    res.clearCookie('session-id');
-		    res.redirect('/');
+		   location.replace('/logout');
 		} else{
 		//false
-			location.replace('/notAuth');
+			this.innerHTML = 'Sign in';
+			location.replace('/login');
 		}
 	}
 });

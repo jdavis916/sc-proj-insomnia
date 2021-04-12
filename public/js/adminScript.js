@@ -12,13 +12,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
 		if(loggedIn){
 			this.innerHTML = 'Logout';
 		//true
-			req.session.destroy();
-		    res.clearCookie('session-id');
-		    res.redirect('/');
+		   location.replace('/logout');
 		} else{
 		//false
 			this.innerHTML = 'Sign in';
-			location.replace('/notAuth');
+			location.replace('/login');
 		}
 	}
 });
