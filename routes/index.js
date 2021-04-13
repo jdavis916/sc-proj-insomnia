@@ -14,6 +14,9 @@ var activeMenu = {
     search: false,
     contact: false,
 };
+
+const stubProjList = ['Enterprise Venture','Infrastructure Plan','Photoshoot','Sculpture Project','Charity Event'];
+
 function loginStatus(req){
 	return (req.user)? true : false;
 }
@@ -45,6 +48,7 @@ router
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
   	pageMainClass: 'pgProjects',
+  	projList: stubProjList,
     active: getMenuActive('projects', activeMenu)
   });
 })
