@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+import { canViewProject, canDeleteProject, scopedProjects } from '../permissions/perms';
+import { authUser, authRole } from '../basicAuth';
 import User from "../backend/models/user";
 var passport = require('passport');
 const mongoose = require('mongoose');
@@ -16,6 +18,23 @@ var activeMenu = {
 };
 
 const stubProjList = ['Enterprise Venture','Infrastructure Plan','Photoshoot','Sculpture Project','Charity Event'];
+
+function authGetProject(req, res, next){
+	if (!canViewProject(req.user, req.project)) {
+		res.status(401);
+		return res.send('Not Allowed');
+	}
+
+	next();
+};
+function authDeleteProject(req, res, next){
+	if (!canDeleteProject(req.user, req.project)) {
+		res.status(401);
+		return res.send('Not Allowed');
+	}
+
+	next();
+};
 
 function loginStatus(req){
 	return (req.user)? true : false;

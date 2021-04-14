@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+import { authUser, authRole } from '../basicAuth';
+//var passport = require('passport');
+//const mongoose = require('mongoose');
+var db = mongoose.connection;
 
 function loginStatus(req){
 	return (req.user)? true : false;
