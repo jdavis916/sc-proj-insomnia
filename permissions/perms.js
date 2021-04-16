@@ -21,7 +21,7 @@ function permProfile(user, profile){
 
 //only a certain user and an admin can view the users' messages
 function viewMessages(user, messages){
-	if(user.role === ROLE.ADMIN){
+	if(user.role === ROLE.ADMIN || user.role === ROLE.MODERATOR){
 		return messages;
 	};
 	return messages.filter(messages => message.userId === user.id);
@@ -29,7 +29,7 @@ function viewMessages(user, messages){
 
 //only admins can view others' messages
 function adminMessages(user, messages){
-	if(user.role === ROLE.ADMIN){
+	if(user.role === ROLE.ADMIN || user.role === ROLE.MODERATOR){
 		return messages;
 	} else {
 		res.status(403).json('Forbidden');
@@ -54,7 +54,8 @@ function permDelPost(user){
 //only a commentor, an admin, or a post owner can remove a comment
 function delComment(user, comment, post){
 	return(
-		user.role === ROLE.ADMIN || 
+		user.role === ROLE.ADMIN ||
+		user.role === ROLE.MODERATOR|| 
 		comment.userId === user.id ||
 		post.userId === userId
 		);
