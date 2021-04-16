@@ -1,7 +1,9 @@
 const ROLE = {
   ADMIN: 'admin',
   MODERATOR: 'moderator',
-  USER: 'user'
+  USER: 'user',
+  SUSPENDED: 'suspended',
+  BANNED: 'banned'
 }
 
 

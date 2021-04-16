@@ -20,9 +20,19 @@ function authRole(role){
 		next();
 	}
 }
+
+//checks to see if a user is banned
+function authBan(req, res, next){
+	if (req.user.role === 'banned'){
+		res.status(403).json('Enforcement action taken on your account.')
+	};
+	next();
+}
+
 module.exports = {
 	authUser,
-	authRole
+	authRole,
+	authBan
 }
 
 

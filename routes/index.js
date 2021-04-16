@@ -1,7 +1,17 @@
 var express = require('express');
 var router = express.Router();
-import { canViewProject, canDeleteProject, scopedProjects, canViewPageAdmin } from '../permissions/perms';
-import { authUser, authRole } from '../basicAuth';
+
+import { 
+  permEditPost,
+  permDelPost,
+  permProfile,
+  permProject,
+  viewMessages,
+  adminMessages,
+  delComment
+   } from '../permissions/perms';
+
+import { authUser, authRole, authBan } from '../basicAuth';
 import User from "../backend/models/user";
 var passport = require('passport');
 const mongoose = require('mongoose');
@@ -10,11 +20,11 @@ var db = mongoose.connection;
 
 /* **TEST ACCOUNTS FOR SITE:**
     USER: {
-      username: LD1990,
+      username: User,
       password: user
     },
     ADMIN {
-      username: Cardinal,
+      username: Admin,
       password: admin
     } */
 
@@ -124,7 +134,7 @@ router
 })
 
 //later on, this route will contain middleware the redirects to a user's own profile
-.get('/profile', function(req, res, next) {
+.get('/profile', authUser, function(req, res, next) {
   res.render('profile', {
   	title: 'User Profile',
   	msg: 'This sample template should help get you on your way.',
@@ -219,7 +229,7 @@ router
     })
     //checks the username and password against entries in the database
     //also assigns session id
-    .post('/login', passport.authenticate('local'), (req, res) => {
+    .post('/login', passport.authenticate('local'), authBan, (req, res) => {
       //console.log(req.session);
     	try{
      		console.log(JSON.stringify(req.headers));
@@ -230,6 +240,15 @@ router
      	}catch(err){
      		res.status(500).json({message: err});
      	}
+    })
+    .post('/createProfile', authUser, passport.authenticate('local'), (req, res) => {
+      //console.log(req.session);
+      try{
+        
+        
+      }catch(err){
+        res.status(500).json({message: err});
+      }
     })
     //clears session info and redirects to the home page
     .get('/logout', (req, res) => {
