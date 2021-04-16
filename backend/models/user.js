@@ -25,7 +25,8 @@ var User = new Schema({
 		type: String
 	},
 	role: {
-		type: String
+		type: String,
+		default: 'user'
 	},
 	projects: {
 		type: String

@@ -1,11 +1,33 @@
 var express = require('express');
 var router = express.Router();
-import { canViewProject, canDeleteProject, scopedProjects } from '../permissions/perms';
-import { authUser, authRole } from '../basicAuth';
+
+import { 
+  permEditPost,
+  permDelPost,
+  permProfile,
+  permProject,
+  viewMessages,
+  adminMessages,
+  delComment
+   } from '../permissions/perms';
+
+import { authUser, authRole, authBan } from '../basicAuth';
 import User from "../backend/models/user";
 var passport = require('passport');
 const mongoose = require('mongoose');
 var db = mongoose.connection;
+
+
+/* **TEST ACCOUNTS FOR SITE:**
+    USER: {
+      username: User,
+      password: user
+    },
+    ADMIN {
+      username: Admin,
+      password: admin
+    } */
+
 
 var activeMenu = {
     home: false,
@@ -16,10 +38,11 @@ var activeMenu = {
     search: false,
     contact: false,
 };
-
+//fabricated array of projects
 const stubProjList = ['Enterprise Venture','Infrastructure Plan','Photoshoot','Sculpture Project','Charity Event'];
 
-function authGetProject(req, res, next){
+//restricts access to a page based on role (these will be changed and implemented later)
+/* function authGetProject(req, res, next){
 	if (!canViewProject(req.user, req.project)) {
 		res.status(401);
 		return res.send('Not Allowed');
@@ -34,11 +57,13 @@ function authDeleteProject(req, res, next){
 	}
 
 	next();
-};
+}; */
 
+//checks to see if a user is logged in on your machine
 function loginStatus(req){
 	return (req.user)? true : false;
 }
+
 function getMenuActive(key, menu){
     //makes a copy of the menu object
     var activeMenu = JSON.parse(JSON.stringify(menu));
@@ -107,7 +132,9 @@ router
     active: getMenuActive('search', activeMenu)
   });
 })
-.get('/profile', function(req, res, next) {
+
+//later on, this route will contain middleware the redirects to a user's own profile
+.get('/profile', authUser, function(req, res, next) {
   res.render('profile', {
   	title: 'User Profile',
   	msg: 'This sample template should help get you on your way.',
@@ -126,6 +153,7 @@ router
   });
 })
 .get('/login', function(req, res, next) {
+  //checks to see if a user is logged in
 	if(req.user){
 		res.send('You are already logged in!');
 	}
@@ -139,6 +167,7 @@ router
     active: getMenuActive('login', activeMenu)
   });
 })
+//general redirect page when a route returns 403
 .get('/notAuth', function(req, res, next) {
   res.render('notAuth', {
   	title: 'Not Authorized',
@@ -200,7 +229,7 @@ router
     })
     //checks the username and password against entries in the database
     //also assigns session id
-    .post('/login', passport.authenticate('local'), (req, res) => {
+    .post('/login', passport.authenticate('local'), authBan, (req, res) => {
       //console.log(req.session);
     	try{
      		console.log(JSON.stringify(req.headers));
@@ -211,6 +240,15 @@ router
      	}catch(err){
      		res.status(500).json({message: err});
      	}
+    })
+    .post('/createProfile', authUser, passport.authenticate('local'), (req, res) => {
+      //console.log(req.session);
+      try{
+        
+        
+      }catch(err){
+        res.status(500).json({message: err});
+      }
     })
     //clears session info and redirects to the home page
     .get('/logout', (req, res) => {
