@@ -145,6 +145,16 @@ router
     active: getMenuActive('search', activeMenu)
   });
 })
+.get('/signup', function(req, res, next) {
+  res.render('signup', {
+    title: 'Sign Up',
+    msg: 'This sample template should help get you on your way.',
+    loggedIn: loginStatus(req),
+    who: whoIs(req),
+    pageMainClass: 'pgSignup',
+    active: getMenuActive('signup', activeMenu)
+  });
+})
 
 //later on, this route will contain middleware the redirects to a user's own profile
 .get('/profile', authUser, function(req, res, next) {
@@ -237,9 +247,8 @@ router
             else {
               //checks the information before sending it through
               passport.authenticate('local')(req, res, () => {
-                res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json({success: true, status: 'Registration Successful!'});
+                res.redirect('/');
               });
             }
           });
