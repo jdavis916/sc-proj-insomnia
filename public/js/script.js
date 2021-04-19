@@ -1,7 +1,9 @@
 console.log("Script file connected");
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed');
-
+    /* if(!loggedIn){
+    	document.getElementById('#btnProf').style.visibility = "hidden";
+    } */
 	document.querySelector('#btnLogout').onclick = function logout(){
 		if(loggedIn){
 			this.innerHTML = 'Logout';
@@ -13,4 +15,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			location.replace('/login');
 		}
 	}
+
+	/* document.querySelector('#btnProf').onclick = function {
+		location.replace('/profile');
+	} */
 });

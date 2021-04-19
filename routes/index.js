@@ -64,6 +64,13 @@ function loginStatus(req){
 	return (req.user)? true : false;
 }
 
+//grabs user's first name
+function whoIs(req){
+  if(req.user){
+  return (req.user.fname);
+  }
+}
+
 function getMenuActive(key, menu){
     //makes a copy of the menu object
     var activeMenu = JSON.parse(JSON.stringify(menu));
@@ -82,6 +89,7 @@ router
   	title: 'Project Insomnia',
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgHome',
     active: getMenuActive('home', activeMenu)
   });
@@ -91,6 +99,7 @@ router
   	title: 'Projects',
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgProjects',
   	projList: stubProjList,
     active: getMenuActive('projects', activeMenu)
@@ -101,6 +110,7 @@ router
     title: 'Users',
     msg: 'This sample template should help get you on your way.',
     loggedIn: loginStatus(req),
+    who: whoIs(req),
     pageMainClass: 'pgTools',
     active: getMenuActive('users', activeMenu)
   });
@@ -110,6 +120,7 @@ router
   	title: 'Tools',
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgTools',
     active: getMenuActive('tools', activeMenu)
   });
@@ -119,6 +130,7 @@ router
     title: 'Teams',
     msg: 'This sample template should help get you on your way.',
     loggedIn: loginStatus(req),
+    who: whoIs(req),
     pageMainClass: 'pgTeams',
     active: getMenuActive('teams', activeMenu)
   });
@@ -128,6 +140,7 @@ router
   	title: 'Search',
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgSearch',
     active: getMenuActive('search', activeMenu)
   });
@@ -139,6 +152,7 @@ router
   	title: 'User Profile',
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgProfile',
     active: getMenuActive('profile', activeMenu)
   });
@@ -148,6 +162,7 @@ router
   	title: 'Contact Us',
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgContact',
     active: getMenuActive('contact', activeMenu)
   });
@@ -160,6 +175,7 @@ router
   res.render('login', {
   	title: 'Log in',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgLogin',
   	usernameLabel: 'Username',
   	passwordLabel: 'Password',
@@ -173,6 +189,7 @@ router
   	title: 'Not Authorized',
   	msg: 'This sample template should help get you on your way.',
   	loggedIn: loginStatus(req),
+    who: whoIs(req),
   	pageMainClass: 'pgHome'
   });
 })
@@ -182,12 +199,12 @@ router
   	msg: "Don't worry, we will not share this information with anyone.",
   	pageMainClass: 'pgSignUp',
   	fnameLabel: 'Enter your first name:',
-	lnameLabel: 'Enter your last name:',
-	emailLabel: 'Enter your email address:',
-	dobLabel: 'Select your date of birth:',
-	projectsLabel: 'What projects are you working on?',
-	usernameLabel: 'Enter a username:',
-	passwordLabel: 'Choose a password:',
+	  lnameLabel: 'Enter your last name:',
+	  emailLabel: 'Enter your email address:',
+	  dobLabel: 'Select your date of birth:',
+	  projectsLabel: 'What projects are you working on?',
+	  usernameLabel: 'Enter a username:',
+	  passwordLabel: 'Choose a password:',
     active: getMenuActive('signup', activeMenu)
   });
 })
