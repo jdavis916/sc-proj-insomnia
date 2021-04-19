@@ -7,6 +7,9 @@ var passport = require('passport'); */
 console.log('Admin area only: Connected');
 window.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed');
+    /* if(!loggedIn){
+    	document.getElementById('#btnProf').style.visibility = "hidden";
+    } */
     
 	document.querySelector('#btnLogout').onclick = function logout(){
 		if(loggedIn){
@@ -19,4 +22,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			location.replace('/login');
 		}
 	}
+	/* document.querySelector('#btnProf').onclick = function {
+		location.replace('/profile');
+	} */
 });

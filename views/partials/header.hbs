@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <script>
       var loggedIn = {{loggedIn}};
-      
+
       console.log(loggedIn);
     </script>
   </head>
@@ -57,6 +57,9 @@
                 </li>
                 <li class="nav-item">
                   <a class="nav-link {{#if active.contact}}active{{/if}}" href="/contact">Contact</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="btnProf"href='/profile'>{{#if loggedIn}}{{who}}{{else}}{{/if}}</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" id="btnLogout"href='#'>{{#if loggedIn}}Sign out{{else}}Login{{/if}}</a>
