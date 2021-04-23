@@ -88,9 +88,10 @@ function auth (req, res, next) {
   console.log(req.user);
 
   if (!req.user) {
-    var err = new Error('You are not authenticated!');
+    /* var err = new Error('You are not authenticated!');
     err.status = 403;
-    next(err);
+    next(err); */ 
+    res.render('errPage', {pageMainClass: 'errPage', path: path});
   }
   else {
     next();

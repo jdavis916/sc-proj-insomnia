@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-
 import { 
   permEditPost,
   permDelPost,
@@ -158,6 +157,11 @@ router
 
 //later on, this route will contain middleware the redirects to a user's own profile
 .get('/profile', authUser, function(req, res, next) {
+  var path = '/login';
+  /* if (!errors.isEmpty()) {
+    res.render('notAuth', {pageMainClass: 'notAuth', path: path});
+  } */
+
   res.render('profile', {
   	title: 'User Profile',
   	msg: 'This sample template should help get you on your way.',
@@ -193,16 +197,6 @@ router
     active: getMenuActive('login', activeMenu)
   });
 })
-//general redirect page when a route returns 403
-.get('/notAuth', function(req, res, next) {
-  res.render('notAuth', {
-  	title: 'Not Authorized',
-  	msg: 'This sample template should help get you on your way.',
-  	loggedIn: loginStatus(req),
-    who: whoIs(req),
-  	pageMainClass: 'pgHome'
-  });
-})
 .get('/signup', function(req, res, next) {
   res.render('signup', {
   	title: 'Sign up',
@@ -224,71 +218,95 @@ router
 .post('/messages', function(req, res, next) {
 
 })
-    .post('/signup', (req, res, next) => {
-      //takes in a username and password and stores it to the database
-      User.register(new User({
-            username: req.body.username,
-            email: req.body.email,
-            fname: req.body.fname,
-            lname: req.body.lname,
-            dob: req.body.dob,
-            password: req.body.password,
-            projects: req.body.projects
-          }),
-          req.body.password, (err, user) => {
-            //displays an error message if the request fails
-            if(err) {
-              console.log(err);
-              res.statusCode = 500;
-              res.setHeader('Content-Type', 'application/json');
-              res.json({err: err});
-            }
-            //displays a 'success' message if the request went through
-            else {
-              //checks the information before sending it through
-              passport.authenticate('local')(req, res, () => {
-                res.setHeader('Content-Type', 'application/json');
-                res.redirect('/');
-              });
-            }
+.post('/signup', (req, res, next) => {
+  //takes in a username and password and stores it to the database
+  User.register(new User({
+        username: req.body.username,
+        email: req.body.email,
+        fname: req.body.fname,
+        lname: req.body.lname,
+        dob: req.body.dob,
+        password: req.body.password,
+        projects: req.body.projects
+      }),
+      req.body.password, (err, user) => {
+        //redirects to error page if the request fails
+        if(err) {
+          console.log(err);
+          //res.statusCode = 500;
+          res.setHeader('Content-Type', 'application/json');
+          var path = '/signup';
+          res.render('errPage', {pageMainClass: 'errPage', path: path});
+        }
+        //displays a 'success' message if the request went through
+        else {
+          //checks the information before sending it through
+          passport.authenticate('local', { failureRedirect: '/errPage' })(req, res, () => {
+            res.setHeader('Content-Type', 'application/json');
+            res.redirect('/');
           });
-    })
-    //checks the username and password against entries in the database
-    //also assigns session id
-    .post('/login', passport.authenticate('local'), authBan, (req, res) => {
-      //console.log(req.session);
-    	try{
-     		console.log(JSON.stringify(req.headers));
-     		res.statusCode = 200;
-     		res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
-     		res.redirect('/profile');
-     		window.location.reload();
-     	}catch(err){
-     		res.status(500).json({message: err});
-     	}
-    })
-    .post('/createProfile', authUser, passport.authenticate('local'), (req, res) => {
-      //console.log(req.session);
-      try{
-        
-        
-      }catch(err){
-        res.status(500).json({message: err});
-      }
-    })
-    //clears session info and redirects to the home page
-    .get('/logout', (req, res) => {
-      if (req.session) {
-        req.session.destroy();
-        res.clearCookie('session-id');
-        res.redirect('/');
-      }
-      else {
-        var err = new Error('You are not logged in!');
-        err.status = 403;
-        next(err);
-      }
-    });
+        }
+      });
+})
+/* checks the username and password against entries in the database
+also assigns session id
+redirects to an error page if it fails */
+.post('/login', passport.authenticate('local', { failureRedirect: '/errPageLogin' }), authBan, (req, res) => {
+  //console.log(req.session);
+	try{
+ 		console.log(JSON.stringify(req.headers));
+ 		res.statusCode = 200;
+ 		res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
+ 		res.redirect('/profile');
+ 		window.location.reload();
+ 	}catch(err){
+ 	  var path = '/login';
+    res.render('errPage', {pageMainClass: 'errPage', path: path});
+  } 	
+})
+.post('/createProfile', authUser, passport.authenticate('local'), (req, res) => {
+  //console.log(req.session);
+  try{
+    
+    
+  }catch(err){
+    var path = '/createProfile';
+    res.render('notAuth', {pageMainClass: 'notAuth', path: path});
+  }
+})
+//clears session info and redirects to the home page
+.get('/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy();
+    res.clearCookie('session-id');
+    res.redirect('/');
+  }
+  else {
+    var err = new Error('You are not logged in!');
+    err.status = 403;
+    next(err);
+  }
+})
+//general redirect page when a route returns 403
+.get('/notAuth', function(req, res, next) {
+  res.render('notAuth', {
+    title: 'Not Authorized',
+    msg: 'This sample template should help get you on your way.',
+    loggedIn: loginStatus(req),
+    who: whoIs(req),
+    pageMainClass: 'notAuth'
+  });
+})
+//general redirect page when a route returns 500
+.get('/errPage', function(req, res, next) {
+  res.render('errPage', {
+    title: 'Error!',
+    msg: 'This sample template should help get you on your way.',
+    loggedIn: loginStatus(req),
+    who: whoIs(req),
+    pageMainClass: 'errPage'
+  });
+});
 
 
 
