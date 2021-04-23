@@ -1,5 +1,10 @@
 <main class="{{pageMainClass}}">
-	<body>
-		NOT LOGGED IN/BAD REQUEST
-	</body>
+	<h1>Oops! Something went wrong...</h1>
+
+	<div class="p-3 mb-2 bg-danger text-white" style="text-align: center">
+		<span class="errmsg">You need to sign in!</span>
+		<form class="errFrm" action="{{path}}" method="get">
+    		<input type="submit" class="btn btn-primary" value="Log In" name="Submit" id="frm1_submit"></input>
+		</form>
+	</div>
 </main>
