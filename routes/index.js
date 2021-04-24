@@ -94,25 +94,54 @@ router
   });
 })
 .get('/projects', function(req, res, next) {
-  res.render('projects', {
-  	title: 'Projects',
-  	msg: 'This sample template should help get you on your way.',
-  	loggedIn: loginStatus(req),
-    who: whoIs(req),
-  	pageMainClass: 'pgProjects',
-  	projList: stubProjList,
-    active: getMenuActive('projects', activeMenu)
-  });
+  try{
+    var result = [];
+    if(!req.user){
+      db.collection('users').find({role: 'user'}).toArray(function(err, resp){
+        console.log(resp);
+
+      });
+    }else if(req.user.role === 'user'){
+      db.collection('users').find({});
+    }
+    res.render('projects', {
+    	title: 'Projects',
+    	msg: 'This sample template should help get you on your way.',
+    	loggedIn: loginStatus(req),
+      who: whoIs(req),
+    	pageMainClass: 'pgProjects',
+    	projList: stubProjList,
+      active: getMenuActive('projects', activeMenu)
+    });
+  }catch(error){
+
+  }
 })
-.get('/users', function(req, res, next) {
-  res.render('users', {
+.get('/users', authUser, function(req, res, next) {
+  try{
+    db.collection('users').find({}).toArray(function(err, resp){
+      console.log(resp);
+      res.render('users', {
+        title: 'Users',
+        msg: 'This sample template should help get you on your way.',
+        response: resp,
+        loggedIn: loginStatus(req),
+        who: whoIs(req),
+        pageMainClass: 'pgTools',
+        active: getMenuActive('users', activeMenu)
+      });
+    });
+  }catch(error){
+    res.render('errPageGeneral', {pageMainClass: 'errPageGeneral', path: path});
+  }
+  /* res.render('users', {
     title: 'Users',
     msg: 'This sample template should help get you on your way.',
     loggedIn: loginStatus(req),
     who: whoIs(req),
     pageMainClass: 'pgTools',
     active: getMenuActive('users', activeMenu)
-  });
+  }); */
 })
 .get('/tools', function(req, res, next) {
   res.render('tools', {
