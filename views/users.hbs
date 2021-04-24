@@ -1,3 +1,17 @@
 <main class="{{pageMainClass}}">
 	<h1>{{title}}</h1>
+	<article class="container">
+		<div class="row carResults">
+			{{#each response}}
+			<div class="col-sm-6 col-md-4">
+    	        <div class="userWrapper">
+    	             <span>Username: {{this.username}}</span> |
+    	             <span>First Name: {{this.fname}}</span> |
+    	             <span>Email: {{this.email}}</span> |
+    	             <span>Projects: {{this.projects}}</span>
+    	        </div>
+    	    </div>
+			{{/each}}
+		</div>
+	</article>
 <main class="{{pageMainClass}}">
